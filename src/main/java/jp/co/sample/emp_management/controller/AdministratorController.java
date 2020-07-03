@@ -76,7 +76,6 @@ public class AdministratorController {
 		
 		if (Objects.nonNull(exist)) {
 			model.addAttribute("exist", "そのメールアドレスは既に登録されています");
-			
 			return "administrator/insert";
 		}
 
