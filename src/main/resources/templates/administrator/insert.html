@@ -78,6 +78,19 @@
 									</div>
 								</div>
 							</div>
+							<!-- 確認用パスワード -->
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-12">
+										<label for="passwaord">
+											確認用パスワード:
+										</label>
+										
+										<span th:text="${confirmPassword}" style="color: red"></span>
+										<input type="password" name="confirmPassword" class="form-control" placeholder="passwordをもう一度入力してください">
+									</div>
+								</div>
+							</div>
 							<!-- 登録ボタン -->
 							<div class="form-group">
 								<div class="row">
