@@ -91,7 +91,7 @@ public class EmployeeRepository {
 	 * @param keyName 検索キー
 	 * @return 検索キーを含む従業員情報一覧
 	 */
-	public List<Employee> findByKyeName(String keyName) {
+	public List<Employee> findByKeyName(String keyName) {
 
 		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count, kananame FROM employees WHERE name LIKE :keyName";
 
@@ -100,5 +100,38 @@ public class EmployeeRepository {
 		List<Employee> employeeList = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
 
 		return employeeList;
+	}
+
+	/**
+	 * 従業員情報を10件ずつ取得します.
+	 * 
+	 * @param offset オフセット
+	 * @return 10件の従業員情報
+	 */
+	public List<Employee> findTenEmployee(Integer offset) {
+
+		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count, kananame FROM employees ORDER BY kananame LIMIT 10 OFFSET :offset";
+
+		SqlParameterSource param = new MapSqlParameterSource().addValue("offset", offset);
+
+		List<Employee> tenEmployeeList = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
+
+		return tenEmployeeList;
+	}
+
+	/**
+	 * 従業員数を取得します.
+	 * 
+	 * @return 従業員数
+	 */
+	public Integer count() {
+
+		String sql = "SELECT count(*) FROM employees";
+
+		SqlParameterSource param = new MapSqlParameterSource();
+
+		Integer count = template.queryForObject(sql, param, Integer.class);
+
+		return count;
 	}
 }
