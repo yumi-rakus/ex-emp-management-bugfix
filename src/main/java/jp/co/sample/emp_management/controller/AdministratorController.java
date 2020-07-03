@@ -75,7 +75,7 @@ public class AdministratorController {
 
 		Administrator exist = administratorService.findByMailAddress(form.getMailAddress());
 
-		if (form.getPassword().length() >= 4 && form.getPassword().length() <= 8) {
+		if ((form.getPassword().length() >= 4 && form.getPassword().length() <= 8) || form.getPassword().equals("")) {
 
 			if (!form.getPassword().equals(confirmPassword)) {
 
