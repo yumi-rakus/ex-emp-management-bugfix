@@ -15,7 +15,7 @@ import jp.co.sample.emp_management.domain.Employee;
 /**
  * employeesテーブルを操作するリポジトリ.
  * 
- * @author igamasayuki
+ * @author yumi takahashi
  * 
  */
 @Repository
@@ -83,5 +83,22 @@ public class EmployeeRepository {
 
 		String updateSql = "UPDATE employees SET dependents_count=:dependentsCount WHERE id=:id";
 		template.update(updateSql, param);
+	}
+
+	/**
+	 * 検索キーを含む従業員情報を取得します.
+	 * 
+	 * @param keyName 検索キー
+	 * @return 検索キーを含む従業員情報一覧
+	 */
+	public List<Employee> findByKyeName(String keyName) {
+
+		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count, kananame FROM employees WHERE name LIKE :keyName";
+
+		SqlParameterSource param = new MapSqlParameterSource().addValue("keyName", "%" + keyName + "%");
+
+		List<Employee> employeeList = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
+
+		return employeeList;
 	}
 }
