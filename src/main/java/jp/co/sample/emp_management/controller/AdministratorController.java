@@ -21,7 +21,7 @@ import jp.co.sample.emp_management.service.AdministratorService;
 /**
  * 管理者情報を操作するコントローラー.
  * 
- * @author igamasayuki
+ * @author yumi takahashi
  *
  */
 @Controller
