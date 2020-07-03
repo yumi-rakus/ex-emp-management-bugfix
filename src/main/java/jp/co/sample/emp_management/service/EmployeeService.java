@@ -60,6 +60,25 @@ public class EmployeeService {
 	 * @return 検索された従業員情報一覧
 	 */
 	public List<Employee> search(String keyName) {
-		return employeeRepository.findByKyeName(keyName);
+		return employeeRepository.findByKeyName(keyName);
+	}
+
+	/**
+	 * 従業員情報を10件取得します.
+	 * 
+	 * @param offset オフセット
+	 * @return 10件の従業員情報
+	 */
+	public List<Employee> showTenList(Integer offset) {
+		return employeeRepository.findTenEmployee(offset);
+	}
+
+	/**
+	 * 従業員数を取得します.
+	 * 
+	 * @return 従業員数
+	 */
+	public Integer employeeCount() {
+		return employeeRepository.count();
 	}
 }
