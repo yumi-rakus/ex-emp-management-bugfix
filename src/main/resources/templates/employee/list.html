@@ -100,6 +100,14 @@
 						</tr>
 					</tbody>
 				</table>
+				
+				<span th:if="${session.offset > 0}">
+					<a th:href="@{/employee/showBack}">戻る</a>
+				</span>
+				
+				<span th:if="${session.offset +10 < session.count}">
+					<a th:href="@{/employee/showNext}">次へ</a>
+				</span>
 
 
 				<!-- ここから下を編集する必要はありません -->
