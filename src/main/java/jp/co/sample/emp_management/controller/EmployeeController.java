@@ -2,6 +2,8 @@ package jp.co.sample.emp_management.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,9 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
+	@Autowired
+	private HttpSession employeeSession;
+
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
 	 * 
@@ -42,15 +47,61 @@ public class EmployeeController {
 	// ユースケース：従業員一覧を表示する
 	/////////////////////////////////////////////////////
 	/**
-	 * 従業員一覧画面を出力します.
+	 * 従業員一覧(10件ずつ)画面を出力します.
 	 * 
 	 * @param model モデル
 	 * @return 従業員一覧画面
 	 */
 	@RequestMapping("/showList")
 	public String showList(Model model) {
-		List<Employee> employeeList = employeeService.showList();
+
+		Integer offset = 0;
+		List<Employee> employeeList = employeeService.showTenList(offset);
+
 		model.addAttribute("employeeList", employeeList);
+		employeeSession.setAttribute("offset", offset);
+		employeeSession.setAttribute("count", employeeService.employeeCount());
+
+		return "employee/list";
+	}
+
+	/**
+	 * 従業員一覧画面で次の10件へ
+	 * 
+	 * @param model モデル
+	 * @return 従業員一覧画面
+	 */
+	@RequestMapping("/showNext")
+	public String showNext(Model model) {
+
+		Integer offset = (Integer) employeeSession.getAttribute("offset");
+		offset += 10;
+
+		List<Employee> employeeList = employeeService.showTenList(offset);
+
+		model.addAttribute("employeeList", employeeList);
+		employeeSession.setAttribute("offset", offset);
+
+		return "employee/list";
+	}
+
+	/**
+	 * 従業員一覧画面で前の10件へ
+	 * 
+	 * @param model モデル
+	 * @return 従業員一覧画面
+	 */
+	@RequestMapping("/showBack")
+	public String showBack(Model model) {
+
+		Integer offset = (Integer) employeeSession.getAttribute("offset");
+		offset -= 10;
+
+		List<Employee> employeeList = employeeService.showTenList(offset);
+
+		model.addAttribute("employeeList", employeeList);
+		employeeSession.setAttribute("offset", offset);
+
 		return "employee/list";
 	}
 
@@ -109,24 +160,21 @@ public class EmployeeController {
 
 		// 空文字で検索した場合全件検索結果を表示
 		if (keyName.trim().equals("")) {
-			employeeList = employeeService.showList();
-			redirectAttributes.addFlashAttribute("employeeList", employeeList);
 
-			return "redirect:/employee/showSearchResult";
+			return "redirect:/employee/showList";
 		}
 
 		// 指定した文字列が存在しなかった場合「１件もありませんでした」というメッセージと共に全件検索結果を表示
 		if (employeeList.isEmpty()) {
 
-			employeeList = employeeService.showList();
-
 			redirectAttributes.addFlashAttribute("result", "お探しの従業員は1件も存在しませんでした");
-			redirectAttributes.addFlashAttribute("employeeList", employeeList);
 
-			return "redirect:/employee/showSearchResult";
+			return "redirect:/employee/showList";
 		}
 
 		redirectAttributes.addFlashAttribute("employeeList", employeeList);
+		employeeSession.setAttribute("count", employeeList.size());
+		employeeSession.setAttribute("offset", 0);
 
 		return "redirect:/employee/showSearchResult";
 	}
