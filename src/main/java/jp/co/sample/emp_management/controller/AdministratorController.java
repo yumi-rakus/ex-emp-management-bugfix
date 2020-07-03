@@ -75,10 +75,13 @@ public class AdministratorController {
 
 		Administrator exist = administratorService.findByMailAddress(form.getMailAddress());
 
-		if (!form.getPassword().equals(confirmPassword)) {
+		if (form.getPassword().length() >= 4 && form.getPassword().length() <= 8) {
 
-			model.addAttribute("confirmPassword", "入力されたパスワードと一致していません");
-			return "administrator/insert";
+			if (!form.getPassword().equals(confirmPassword)) {
+
+				model.addAttribute("confirmPassword", "入力されたパスワードと一致していません");
+				return "administrator/insert";
+			}
 		}
 
 		if (Objects.nonNull(exist)) {
@@ -127,9 +130,9 @@ public class AdministratorController {
 			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return toLogin();
 		}
-		
+
 		session.setAttribute("administratorName", administrator.getName());
-		
+
 		return "forward:/employee/showList";
 	}
 
