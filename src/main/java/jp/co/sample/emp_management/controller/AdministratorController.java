@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.sample.emp_management.domain.Administrator;
 import jp.co.sample.emp_management.form.InsertAdministratorForm;
-import jp.co.sample.emp_management.form.LoginForm;
 import jp.co.sample.emp_management.service.AdministratorService;
 
 /**
@@ -42,12 +40,6 @@ public class AdministratorController {
 	@ModelAttribute
 	public InsertAdministratorForm setUpInsertAdministratorForm() {
 		return new InsertAdministratorForm();
-	}
-
-	// (SpringSecurityに任せるためコメントアウトしました)
-	@ModelAttribute
-	public LoginForm setUpLoginForm() {
-		return new LoginForm();
 	}
 
 	/////////////////////////////////////////////////////
@@ -96,9 +88,10 @@ public class AdministratorController {
 		}
 
 		Administrator administrator = new Administrator();
-		// フォームからドメインにプロパティ値をコピー
-		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator);
+
+		administrator.setName(form.getName());
+		administrator.setMailAddress(form.getMailAddress());
+		administratorService.insert(administrator, form.getPassword());
 
 		return "redirect:/";
 	}
@@ -117,23 +110,17 @@ public class AdministratorController {
 	}
 
 	/**
-	 * ログインします.
+	 * ログイン失敗における処理をします.
 	 * 
-	 * @param form   管理者情報用フォーム
-	 * @param result エラー情報格納用オブッジェクト
-	 * @return ログイン後の従業員一覧画面
+	 * @param model モデル
+	 * @return ログイン画面
 	 */
 	@RequestMapping("/login")
-	public String login(LoginForm form, BindingResult result, Model model) {
-		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
-		if (administrator == null) {
-			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
-			return toLogin();
-		}
+	public String login(Model model) {
 
-		session.setAttribute("administratorName", administrator.getName());
+		model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 
-		return "forward:/employee/showList";
+		return toLogin();
 	}
 
 	/////////////////////////////////////////////////////
