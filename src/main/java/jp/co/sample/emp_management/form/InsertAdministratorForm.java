@@ -5,7 +5,7 @@ import javax.validation.constraints.*;
 /**
  * 管理者情報登録時に使用するフォーム.
  * 
- * @author igamasayuki
+ * @author yumi takahashi
  * 
  */
 public class InsertAdministratorForm {
