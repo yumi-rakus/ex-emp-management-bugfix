@@ -3,15 +3,17 @@ package jp.co.sample.emp_management.form;
 /**
  * ログイン時に使用するフォーム.
  * 
- * @author igamasayuki
+ * @author yumi takahashi
  * 
  */
 public class LoginForm {
 	/** メールアドレス */
 	private String mailAddress;
+
 	/** パスワード */
 	private String password;
 
+	// getter setter
 	public String getMailAddress() {
 		return mailAddress;
 	}
@@ -28,6 +30,7 @@ public class LoginForm {
 		this.password = password;
 	}
 
+	// toString
 	@Override
 	public String toString() {
 		return "LoginForm [mailAddress=" + mailAddress + ", password=" + password + "]";
