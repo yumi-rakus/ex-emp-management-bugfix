@@ -81,4 +81,13 @@ public class EmployeeService {
 	public Integer employeeCount() {
 		return employeeRepository.count();
 	}
+
+	/**
+	 * 従業員情報を新規登録します.
+	 * 
+	 * @param employee 従業員情報
+	 */
+	public void register(Employee employee) {
+		employeeRepository.insert(employee);
+	}
 }
