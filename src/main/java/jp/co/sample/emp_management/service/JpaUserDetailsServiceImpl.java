@@ -24,7 +24,7 @@ public class JpaUserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
 	private AdministratorRepository administratorRepository;
-	
+
 	@Autowired
 	private HttpSession session;
 
@@ -32,11 +32,11 @@ public class JpaUserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String mailAddress) throws UsernameNotFoundException {
 
 		Administrator administrator = administratorRepository.findByMailAddress(mailAddress);
-		
-		if(Objects.isNull(administrator)) {
+
+		if (Objects.isNull(administrator)) {
 			return new Administrator();
 		}
-		
+
 		session.setAttribute("administratorName", administrator.getName());
 		return administrator;
 	}
