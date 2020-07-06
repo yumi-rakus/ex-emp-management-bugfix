@@ -134,4 +134,32 @@ public class EmployeeRepository {
 
 		return count;
 	}
+
+	/**
+	 * 従業員情報を挿入します.
+	 * 
+	 * @param employee 従業員情報
+	 */
+	public void insert(Employee employee) {
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("INSERT INTO employees ");
+		sql.append(
+				"(id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count, kananame) ");
+		sql.append(" VALUES");
+		sql.append(
+				"((SELECT max(id)+1 FROM employees), :name, :image, :gender, :hireDate, :mailAddress, :zipCode, :address, :telephone, :salary, :characteristics, :dependentsCount, :kanaName)");
+
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", employee.getName())
+				.addValue("image", employee.getImage()).addValue("gender", employee.getGender())
+				.addValue("hireDate", employee.getHireDate()).addValue("mailAddress", employee.getMailAddress())
+				.addValue("zipCode", employee.getZipCode()).addValue("address", employee.getAddress())
+				.addValue("telephone", employee.getTelephone()).addValue("salary", employee.getSalary())
+				.addValue("characteristics", employee.getCharacteristics())
+				.addValue("dependentsCount", employee.getDependentsCount())
+				.addValue("kanaName", employee.getKanaName());
+
+		template.update(sql.toString(), param);
+	}
 }
