@@ -90,4 +90,14 @@ public class EmployeeService {
 	public void register(Employee employee) {
 		employeeRepository.insert(employee);
 	}
+
+	/**
+	 * 従業員が存在しているかを判定します.
+	 * 
+	 * @param mailAddress メールアドレス
+	 * @return 従業員が存在していたらtrue、存在していなかったらfalseを返す
+	 */
+	public boolean findByMailAddress(String mailAddress) {
+		return employeeRepository.findByMailAddress(mailAddress);
+	}
 }
