@@ -162,4 +162,25 @@ public class EmployeeRepository {
 
 		template.update(sql.toString(), param);
 	}
+
+	/**
+	 * メールアドレスから従業員が存在するかを判定します.
+	 * 
+	 * @param mailAddress メールアドレス
+	 * @return 従業員が存在していたらtrue、存在していなかったらfalseを返す
+	 */
+	public boolean findByMailAddress(String mailAddress) {
+
+		String sql = "SELECT count(*) FROM employees WHERE mail_address = :mailAddress";
+
+		SqlParameterSource param = new MapSqlParameterSource().addValue("mailAddress", mailAddress);
+
+		Integer count = template.queryForObject(sql, param, Integer.class);
+
+		if (count == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }
