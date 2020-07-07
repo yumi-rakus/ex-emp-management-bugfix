@@ -37,11 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests() // 認証が必要となるURLを設定
 				.antMatchers("/toInsert").permitAll() // 管理者登録画面は認証不要
 				.antMatchers("/insert").permitAll() // 管理者登録は認証不要
-				.antMatchers("/login").permitAll().antMatchers("/").permitAll() // ログインページは認証不要
-				.anyRequest().authenticated() // それ以外はすべて認証された状態でないと閲覧不可
-				.and().formLogin() // ログインページに飛ばす
-				.loginProcessingUrl("/login") // ログイン処理をするURL
-				.loginPage("/"); // ログインページのURL
+				.antMatchers("/login").permitAll() // ログイン処理は認証不要
+				.antMatchers("/").permitAll() // ログインページは認証不要
+				.anyRequest().authenticated(); // それ以外はすべて認証された状態でないと閲覧不可
 
 		http.formLogin().loginProcessingUrl("/login") // 認証処理を起動させるパス
 				.loginPage("/") // ログインフォームのパス
