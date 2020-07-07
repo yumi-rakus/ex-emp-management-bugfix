@@ -74,7 +74,7 @@
 				<!-- ここから上を編集する必要はありません -->
 
 				<!-- ここにモックのtable要素を貼り付けます -->
-				<form method="post" th:action="@{/employee/register}" th:object="${insertEmployeeForm}" enctype="multipart/form-data">
+				<form method="post" th:action="@{/employee/register}" th:object="${insertEmployeeForm}" enctype="multipart/form-data" id="form">
 						<fieldset>
 							<legend>従業員登録<br>(新規に従業員を登録します)</legend>
 							<!-- 氏名 -->
@@ -84,7 +84,7 @@
 										<label for="name">
 											氏名:
 										</label>
-										<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></span><br>
+										<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></div>
 										<input type="text" name="name" id="name" class="form-control" placeholder="山田太郎" th:field="*{name}" th:errorclass="error-input">
 									</div>
 								</div>
@@ -97,7 +97,7 @@
 											氏名(ふりがな):
 										</label>
 										
-										<span th:if="${#fields.hasErrors('kanaName')}" th:errors="*{kanaName}" style="color: red"></span><br>
+										<div th:if="${#fields.hasErrors('kanaName')}" th:errors="*{kanaName}" style="color: red"></div>
 										<input type="text" name="kanaName" id="kanaName" class="form-control" placeholder="やまだたろう" th:field="*{kanaName}" th:errorclass="error-input">
 									</div>
 								</div>
@@ -110,17 +110,18 @@
 											画像:
 										</label>
 										<div>
-											<br>
-												 
+											
 											<div class="imagePreview"></div>
 											<div class="input-group">
    												 <label class="input-group-btn">
      							   					<span class="btn btn-primary">
-      													Choose File<input type="file" name="image" id="image" class="uploadFile" style="display:none" th:field="*{image}">		 
+      													Choose File<input type="file" name="image" id="image" class="uploadFile" style="display:none" th:field="*{image}" accept=".jpg,.png">		 
     								   				</span>
  										  		</label>
   										   			<input type="text" class="form-control" readonly>
 											</div>
+											<div id="file-size-error"></div>
+											<div id="imageResult" th:text="${imageResult}" style="color: red"></div>
 										</div>
 									</div>
 								</div>
@@ -133,7 +134,7 @@
 											性別:
 										</label>
 										<div>
-											<span th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" style="color: red"></span><br>
+											<div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" style="color: red"></div>
 											<input type="radio" name="gender" id="genderMale" value="男性" th:field="*{gender}">男性
 											<input type="radio" name="gender" id="genderFemale" value="女性" th:field="*{gender}">女性
 										</div>
@@ -147,11 +148,10 @@
 										<label for="hireDate">
 											入社日:
 										</label>
-										<div>
-											<span th:if="${#fields.hasErrors('hireYear')}" th:errors="*{hireYear}" style="color: red"></span><br>
-											<span th:if="${#fields.hasErrors('hireMonth')}" th:errors="*{hireMonth}" style="color: red"></span><br>
-											<span th:if="${#fields.hasErrors('hireDay')}" th:errors="*{hireDay}" style="color: red"></span><br>
-											
+											<div th:if="${#fields.hasErrors('hireYear')}" th:errors="*{hireYear}" style="color: red"></div>
+											<div th:if="${#fields.hasErrors('hireMonth')}" th:errors="*{hireMonth}" style="color: red"></div>
+											<div th:if="${#fields.hasErrors('hireDay')}" th:errors="*{hireDay}" style="color: red"></div>
+										
 											<div class="input-group">
 											<select name="hireYear" id="hireYear" th:field="*{hireYear}" class="form-control" th:errorclass="error-input">
 												<option th:each="hireYearValue : ${hireYearList}" th:value="${hireYearValue}" th:text="${hireYearValue}"></option>
@@ -166,7 +166,7 @@
 											</select>
 											<span class="input-group-addon">日</span>
 											</div>
-										</div>
+										
 									</div>
 								</div>
 							</div>
@@ -177,8 +177,8 @@
 										<label for="mailAddress">
 											メールアドレス:
 										</label>
-										
-										<span th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}" style="color: red"></span><br>
+										<div th:text="${mailAddressResult}" style="color: red"></div>
+										<div th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}" style="color: red"></div>
 										<input type="text" name="mailAddress" id="mailAddress" class="form-control" placeholder="yamada@mail.com" value="yamada@mail.com" th:field="*{mailAddress}" th:errorclass="error-input">
 									</div>
 								</div>
@@ -191,8 +191,8 @@
 											郵便番号:
 										</label>
 										<div>
-											<span th:if="${#fields.hasErrors('zipCodeFirst')}" th:errors="*{zipCodeFirst}" style="color: red"></span><br>
-											<span th:if="${#fields.hasErrors('zipCodeLast')}" th:errors="*{zipCodeLast}" style="color: red"></span><br>
+											<div th:if="${#fields.hasErrors('zipCodeFirst')}" th:errors="*{zipCodeFirst}" style="color: red"></div>
+											<div th:if="${#fields.hasErrors('zipCodeLast')}" th:errors="*{zipCodeLast}" style="color: red"></div>
 											
 											<div class="input-group">
 											<input type="number" name="zipCodeFirst" id="zipCodeFirst" class="form-control" placeholder="123" value="156" th:field="*{zipCodeFirst}" th:errorclass="error-input">
@@ -213,7 +213,7 @@
 											住所（都道府県市区町村）:
 										</label>
 										
-										<span th:if="${#fields.hasErrors('addressFirst')}" th:errors="*{addressFirst}" style="color: red"></span><br>
+										<div th:if="${#fields.hasErrors('addressFirst')}" th:errors="*{addressFirst}" style="color: red"></div>
 										<input type="text" name="addressFirst" id="addressFirst" class="form-control" placeholder="東京都新宿区" value="東京都新宿区" th:field="*{addressFirst}" th:errorclass="error-input">
 									</div>
 								</div>
@@ -225,7 +225,7 @@
 										<label for="addressLast">
 											住所（番地以降）:
 										</label>
-										<span th:if="${#fields.hasErrors('addressLast')}" th:errors="*{addressLast}" style="color: red"></span><br>
+										<div th:if="${#fields.hasErrors('addressLast')}" th:errors="*{addressLast}" style="color: red"></div>
 										<input type="text" name="addressLast" id="addressLast" class="form-control" placeholder="1-1-1 〇〇マンション 000号室" value="1-1-1 〇〇マンション 000号室" th:field="*{addressLast}" th:errorclass="error-input">
 									</div>
 								</div>
@@ -240,9 +240,9 @@
 										</label>
 										
 										<div>
-										<span th:if="${#fields.hasErrors('telephoneFirst')}" th:errors="*{telephoneFirst}" style="color: red"></span><br>
-										<span th:if="${#fields.hasErrors('telephoneMiddle')}" th:errors="*{telephoneMiddle}" style="color: red"></span><br>
-										<span th:if="${#fields.hasErrors('telephoneLast')}" th:errors="*{telephoneLast}" style="color: red"></span><br>
+										<div th:if="${#fields.hasErrors('telephoneFirst')}" th:errors="*{telephoneFirst}" style="color: red"></div>
+										<div th:if="${#fields.hasErrors('telephoneMiddle')}" th:errors="*{telephoneMiddle}" style="color: red"></div>
+										<div th:if="${#fields.hasErrors('telephoneLast')}" th:errors="*{telephoneLast}" style="color: red"></div>
 										
 										<div class="input-group">
 										<input type="number" name="telephoneFirst" id="telephoneFirst" th:field="*{telephoneFirst}" class="form-control" placeholder="090" value="090" th:errorclass="error-input">
@@ -266,7 +266,7 @@
 										<label for="salary">
 											給料:
 										</label>
-										<span th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" style="color: red"></span><br>
+										<div th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" style="color: red"></div>
 									</div>
 								</div>
 							</div>
@@ -274,7 +274,6 @@
 								<div class="row">
 									<div class="col-sm-4">
 										<div class="input-group">
-										
 										<input type="number" name="salary" id="salary" th:field="*{salary}" class="form-control" placeholder="100000" value="100000" th:errorclass="error-input">
 										<span class="input-group-addon">円</span>
 										</div>
@@ -288,7 +287,7 @@
 										<label for="characteristics">
 											特性:
 										</label>
-										<span th:if="${#fields.hasErrors('characteristics')}" th:errors="*{characteristics}" style="color: red"></span><br>
+										<div th:if="${#fields.hasErrors('characteristics')}" th:errors="*{characteristics}" style="color: red"></div>
 										<textarea rows="5" name="characteristics" id="characteristics" th:field="*{characteristics}" class="form-control" th:errorclass="error-input" placeholder="明るい人柄です。"></textarea>
 									</div>
 								</div>
@@ -300,7 +299,7 @@
 										<label for="dependentsCount">
 											扶養人数:
 										</label>
-										<span th:if="${#fields.hasErrors('dependentsCount')}" th:errors="*{dependentsCount}" style="color: red"></span><br>
+										<div th:if="${#fields.hasErrors('dependentsCount')}" th:errors="*{dependentsCount}" style="color: red"></div>
 									</div>
 								</div>
 							</div>
@@ -340,14 +339,8 @@
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="../../static/js/bootstrap.min.js"></script>
 	<script src="/js/ajaxzip3.js" charset="UTF-8"></script>
-	<script>
-	$(function() {
-		  $('#registerbtn').on('click', function() {
-		     $(this).prop('disabled', true);
-		     $('form').submit();
-		  });
-		});
-	
+	<script src="/js/file-upload-validation.js"></script>
+	<script>	
 	$(document).on('change', ':file', function() {
 	    var input = $(this),
 	    numFiles = input.get(0).files ? input.get(0).files.length : 1,
