@@ -69,8 +69,18 @@ public class EmployeeController {
 		List<Employee> employeeList = employeeService.showTenList(offset);
 
 		model.addAttribute("employeeList", employeeList);
+
 		employeeSession.setAttribute("offset", offset);
 		employeeSession.setAttribute("count", employeeService.employeeCount());
+
+		List<Employee> employeeListAll = employeeService.showList();
+		String employeesName = "";
+
+		for (Employee employee : employeeListAll) {
+			employeesName = employeesName + employee.getName() + ",";
+		}
+
+		employeeSession.setAttribute("employeesName", employeesName);
 
 		return "employee/list";
 	}
@@ -84,8 +94,16 @@ public class EmployeeController {
 	@RequestMapping("/showNext")
 	public String showNext(Model model) {
 
+		Integer count = employeeService.employeeCount();
 		Integer offset = (Integer) employeeSession.getAttribute("offset");
 		offset += 10;
+
+		if (offset > count) {
+			offset = count - 1;
+			Integer num = offset % 10;
+
+			offset = num * 10;
+		}
 
 		List<Employee> employeeList = employeeService.showTenList(offset);
 
@@ -106,6 +124,10 @@ public class EmployeeController {
 
 		Integer offset = (Integer) employeeSession.getAttribute("offset");
 		offset -= 10;
+
+		if (offset < 0) {
+			offset = 0;
+		}
 
 		List<Employee> employeeList = employeeService.showTenList(offset);
 
@@ -262,6 +284,18 @@ public class EmployeeController {
 	@RequestMapping("/register")
 	synchronized String register(@Validated InsertEmployeeForm form, BindingResult result, Model model)
 			throws Exception {
+
+		boolean exist = employeeService.findByMailAddress(form.getMailAddress());
+
+		if (exist) {
+			model.addAttribute("mailAddressResult", "既に登録されているメールアドレスです。");
+			return toRegister(model);
+		}
+
+		if (form.getImage().getOriginalFilename().equals("")) {
+			model.addAttribute("imageResult", "画像を選択してください");
+			return toRegister(model);
+		}
 
 		if (result.hasErrors()) {
 			return toRegister(model);
