@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import jp.co.sample.emp_management.domain.Employee;
 
 /**
- * employeesテーブルを操作するリポジトリ.
+ * employeesテーブルを操作するリポジトリー.
  * 
  * @author yumi takahashi
  * 
@@ -70,9 +70,9 @@ public class EmployeeRepository {
 
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 
-		Employee development = template.queryForObject(sql, param, EMPLOYEE_ROW_MAPPER);
+		Employee employee = template.queryForObject(sql, param, EMPLOYEE_ROW_MAPPER);
 
-		return development;
+		return employee;
 	}
 
 	/**
@@ -146,10 +146,10 @@ public class EmployeeRepository {
 
 		sql.append("INSERT INTO employees ");
 		sql.append(
-				"(id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count, kananame) ");
+				"(name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count, kananame) ");
 		sql.append(" VALUES");
 		sql.append(
-				"((SELECT max(id)+1 FROM employees), :name, :image, :gender, :hireDate, :mailAddress, :zipCode, :address, :telephone, :salary, :characteristics, :dependentsCount, :kanaName)");
+				"(:name, :image, :gender, :hireDate, :mailAddress, :zipCode, :address, :telephone, :salary, :characteristics, :dependentsCount, :kanaName)");
 
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", employee.getName())
 				.addValue("image", employee.getImage()).addValue("gender", employee.getGender())
