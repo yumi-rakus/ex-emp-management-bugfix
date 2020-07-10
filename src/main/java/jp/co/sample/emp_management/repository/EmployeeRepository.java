@@ -93,7 +93,7 @@ public class EmployeeRepository {
 	 */
 	public List<Employee> findByKeyName(String keyName) {
 
-		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count, kananame FROM employees WHERE name LIKE :keyName";
+		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count, kananame FROM employees WHERE name LIKE :keyName ORDER BY kananame";
 
 		SqlParameterSource param = new MapSqlParameterSource().addValue("keyName", "%" + keyName + "%");
 
