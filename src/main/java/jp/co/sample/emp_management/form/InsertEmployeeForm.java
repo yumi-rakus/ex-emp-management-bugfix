@@ -123,7 +123,7 @@ public class InsertEmployeeForm {
 	 * 扶養人数
 	 */
 	@NotNull(message = "扶養人数を入力してください")
-	@Range(min = 0, message = "0以上の値を入力してください")
+	@Range(min = 0, max=10, message = "0以上10以下の値を入力してください")
 	private Integer dependentsCount;
 
 	// getter setter
