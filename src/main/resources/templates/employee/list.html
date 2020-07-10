@@ -30,7 +30,7 @@
 							class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand" href="list.html"
-						th:href="@{/employee/showList}"> <!-- 企業ロゴ --> <img
+						th:href="@{/employee/showList?offset=0}"> <!-- 企業ロゴ --> <img
 						src="../../static/img/header_logo_small.png"
 						th:src="@{/img/header_logo_small.png}">
 					</a>
@@ -41,7 +41,7 @@
 					id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li class="active"><a href="list.html"
-							th:href="@{/employee/showList}">従業員管理</a></li>
+							th:href="@{/employee/showList?offset=0}">従業員管理</a></li>
 							
 						<li class="active"><a href="register.html"
 							th:href="@{/employee/toRegister}">従業員登録</a></li>
@@ -60,7 +60,7 @@
 		<!-- パンくずリスト -->
 		<ol class="breadcrumb">
 			<li class="active"><a href="list.html"
-				th:href="@{/employee/showList}">従業員リスト</a></li>
+				th:href="@{/employee/showList?offset=0}">従業員リスト</a></li>
 		</ol>
 
 		<!-- table -->
@@ -106,12 +106,12 @@
 					</tbody>
 				</table>
 				
-				<span th:if="${session.offset > 0}">
-					<a th:href="@{/employee/showBack}">戻る</a>
+				<span th:if="${session.offsetNum > 0}">
+					<a th:href="@{'/employee/showList?offset=' + ${session.offsetNum-10}}">戻る</a>
 				</span>
 				
-				<span th:if="${session.offset +10 < session.count}">
-					<a th:href="@{/employee/showNext}">次へ</a>
+				<span th:if="${session.offsetNum +10 < session.count}">
+					<a th:href="@{'/employee/showList?offset=' + ${session.offsetNum+10}}">次へ</a>
 				</span>
 
 
