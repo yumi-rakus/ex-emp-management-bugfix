@@ -63,15 +63,15 @@ public class EmployeeController {
 	 * @return 従業員一覧画面
 	 */
 	@RequestMapping("/showList")
-	public String showList(Model model) {
+	public String showList(String offset, Model model) {
 
-		Integer offset = 0;
-		List<Employee> employeeList = employeeService.showTenList(offset);
+		List<Employee> employeeList;
+		employeeSession.setAttribute("count", employeeService.employeeCount());
+
+		employeeList = employeeService.showTenList(Integer.parseInt(offset));
+		employeeSession.setAttribute("offsetNum", Integer.parseInt(offset));
 
 		model.addAttribute("employeeList", employeeList);
-
-		employeeSession.setAttribute("offset", offset);
-		employeeSession.setAttribute("count", employeeService.employeeCount());
 
 		List<Employee> employeeListAll = employeeService.showList();
 		String employeesName = "";
@@ -83,58 +83,7 @@ public class EmployeeController {
 		employeeSession.setAttribute("employeesName", employeesName);
 
 		return "employee/list";
-	}
 
-	/**
-	 * 従業員一覧画面で次の10件へ
-	 * 
-	 * @param model モデル
-	 * @return 従業員一覧画面
-	 */
-	@RequestMapping("/showNext")
-	public String showNext(Model model) {
-
-		Integer count = employeeService.employeeCount();
-		Integer offset = (Integer) employeeSession.getAttribute("offset");
-		offset += 10;
-
-		if (offset > count) {
-			offset = count - 1;
-			Integer num = offset % 10;
-
-			offset = num * 10;
-		}
-
-		List<Employee> employeeList = employeeService.showTenList(offset);
-
-		model.addAttribute("employeeList", employeeList);
-		employeeSession.setAttribute("offset", offset);
-
-		return "employee/list";
-	}
-
-	/**
-	 * 従業員一覧画面で前の10件へ
-	 * 
-	 * @param model モデル
-	 * @return 従業員一覧画面
-	 */
-	@RequestMapping("/showBack")
-	public String showBack(Model model) {
-
-		Integer offset = (Integer) employeeSession.getAttribute("offset");
-		offset -= 10;
-
-		if (offset < 0) {
-			offset = 0;
-		}
-
-		List<Employee> employeeList = employeeService.showTenList(offset);
-
-		model.addAttribute("employeeList", employeeList);
-		employeeSession.setAttribute("offset", offset);
-
-		return "employee/list";
 	}
 
 	/////////////////////////////////////////////////////
@@ -337,7 +286,7 @@ public class EmployeeController {
 
 		employeeService.register(employee);
 
-		return "redirect:/employee/showList";
+		return "redirect:/employee/showList?offset=0";
 	}
 
 }
